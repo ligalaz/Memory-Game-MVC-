@@ -39,7 +39,7 @@ const baseConfig = {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "./src/game.html"),
-            filename: "game.html",
+            filename: "index.html",
             favicon: path.resolve(__dirname, "./src/resources/icons/favicons/game-favicon.png"),
         }),
         new CleanWebpackPlugin(),
