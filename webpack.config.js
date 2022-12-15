@@ -6,7 +6,7 @@ const EslintPlugin = require("eslint-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 const baseConfig = {
-    entry: path.resolve(__dirname, "./src/game.ts"),
+    entry: path.resolve(__dirname, "./src/Game.ts"),
     mode: "development",
     module: {
         rules: [
@@ -32,7 +32,7 @@ const baseConfig = {
         extensions: [".ts", ".js"],
     },
     output: {
-        filename: "index.js",
+        filename: "Game.js",
         path: path.resolve(__dirname, "./dist"),
         assetModuleFilename: "resources/logo/[name][ext]",
     },
@@ -40,7 +40,7 @@ const baseConfig = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "./src/game.html"),
             filename: "game.html",
-            favicon: path.resolve(__dirname, "./src/resources/logo/favicon.png"),
+            favicon: path.resolve(__dirname, "./src/resources/icons/favicons/game-favicon.png"),
         }),
         new CleanWebpackPlugin(),
         new EslintPlugin({ extensions: "ts" }),
