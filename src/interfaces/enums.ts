@@ -5,7 +5,7 @@ export enum Kit {
 }
 
 export enum Timer {
-    Minimum = 60,
-    Middle = 90,
-    Maximum = 120,
+    Minimum = `60`,
+    Middle = `90`,
+    Maximum = `120`,
 }

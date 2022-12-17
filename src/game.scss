@@ -6,12 +6,13 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  @include space-vert-flex;
+  @include centr-vert-flex;
   background-image: url("./resources/img/pokemon_bg.jpg");
   background-size: cover;
 
   &_started_false {
     @include centr-vert-flex;
+   
   }
 
   &_hidden {
@@ -46,12 +47,14 @@
   }
 
   &__main {
-    @include centr-horiz-flex;
+    @include centr-vert-flex;
+
   }
 
   .pause-btn__item {
     cursor: pointer;
   }
+
 
   &__timer {
     width: 100px;
@@ -102,6 +105,62 @@
 }
 
 /* Menu */
+
+.main-message {
+      position: absolute;
+      width:340px;
+      height:100px;
+      top:50%-calc(100px /2);
+      left:50%-calc(340px/2);
+      z-index: 10;
+      text-align: center;
+      word-spacing: 10px;
+      opacity: 1;
+       @include crossbrowser_transition(0.5s);
+
+      @include centr-vert-flex;
+      gap:10px;
+
+      @include font-styler(
+                $standart_size,
+                $standart_size,
+                $weight:400,
+                $color: $text_color,
+                );
+                text-shadow: $text-shadow_color;
+      background-image:$gradient;
+
+      &_hidden {
+        z-index: -1;
+        opacity: 0;
+        @include crossbrowser_transition(0.5s);
+
+      }
+
+      &__attention {
+        font-weight: 700;
+      }
+
+      &__button {
+        display: block;
+        padding: 5px;
+
+        @include crossbrowser_br(10px);
+        border:2px solid $menu-border_color;
+
+        @include font-styler(
+                $standart_size,
+                $standart_size,
+                $weight:400,
+                $color: $text_color,
+                );
+                text-shadow: $text-shadow_color;
+
+        cursor:pointer;
+      }
+
+
+      }
 
 .game-menu__item {
  
@@ -168,7 +227,14 @@
 }
 
 .start-menu {
-  display: none;
+  opacity: 1;
+  @include crossbrowser_transition(0.5s);
+
+  &_hidden {
+    opacity: 0.7;
+    @include crossbrowser_transition(0.5s);
+  }
+
   
   &__title::after {
   right: -20.5px;
