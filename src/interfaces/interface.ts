@@ -5,7 +5,7 @@ export interface ICard {
 }
 
 export interface IResult {
-    name: string;
+    playerName: string;
     time: Date;
 }
 
@@ -14,16 +14,21 @@ export interface GameSettings {
     gameCards: number;
     element: HTMLElement;
 }
+export interface IProps {
+    playerName: string;
+    gameField: Array<ICard>;
+    timer: string;
+}
 
 export abstract class View {
     constructor(public element: HTMLElement) {
         this.element = element;
     }
 
-    public render(props?: string): void {}
+    public render(props?: IProps): void {}
 
     public hosts(): void {}
     public listeners(): void {}
 
-    public initialize(props?: string): void {}
+    public initialize(props?: IProps): void {}
 }

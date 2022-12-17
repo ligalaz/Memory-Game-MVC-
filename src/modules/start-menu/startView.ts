@@ -37,46 +37,46 @@ export class StartView extends View {
                         <div class="radio-btn form__radio-btn">
                             <p class="radio-btn__text">Select number of card:</p>
                             <div class="radio-btn__selects">
-                            <div class="radio-btn-input radio-btn__item">
-                <input
-                  type="radio"
-                  id="radio-1"
-                  name="radio"
-                  value="8"
-                  class="radio-btn__item-input"
-                  checked
-                />
-                <label class="radio-btn-label label_checked" for="radio-1">16 CARD</label>
-              </div>
-              <div class="radio-btn-input radio-btn__item">
-                <input
-                  type="radio"
-                  id="radio-2"
-                  name="radio"
-                  value="12"
-                  class="radio-btn__item-input"
-                />
-                <label class="radio-btn-label" for="radio-2">24 CARD</label>
-              </div>
-              <div class="radio-btn-input radio-btn__item">
-                <input
-                  type="radio"
-                  id="radio-3"
-                  name="radio"
-                  value="16"
-                  class="radio-btn__item-input"
-                />
-                <label class="radio-btn-label" for="radio-3">32 CARD</label>
-              </div>
+                                <div class="radio-btn-input radio-btn__item">
+                                    <input
+                                         type="radio"
+                                        id="radio-1"
+                                        name="radio"
+                                        value="8"
+                                        class="radio-btn__item-input"
+                                        checked
+                                    />
+                                    <label class="radio-btn-label label_checked" for="radio-1">16 CARD</label>
+                                </div>
+                                <div class="radio-btn-input radio-btn__item">
+                                    <input
+                                        type="radio"
+                                        id="radio-2"
+                                        name="radio"
+                                        value="12"
+                                        class="radio-btn__item-input"
+                                    />
+                                    <label class="radio-btn-label" for="radio-2">24 CARD</label>
+                                </div>
+                                <div class="radio-btn-input radio-btn__item">
+                                    <input
+                                        type="radio"
+                                        id="radio-3"
+                                        name="radio"
+                                        value="16"
+                                        class="radio-btn__item-input"
+                                    />
+                                    <label class="radio-btn-label" for="radio-3">32 CARD</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="menu-btn start-menu__btn">
+                            START GAME
+                        </button>
+                    </form>
             </div>
-          </div>
-          <button type="submit" class="menu-btn start-menu__btn">
-            START GAME
-          </button>
-        </form>
       </div>
-      </div>
-      </main>`;
+</main>`;
     }
 
     public hosts(): void {
@@ -98,7 +98,6 @@ export class StartView extends View {
                     gameCards: this.getGameCardValue(),
                     element: this.element,
                 });
-                console.log();
             } else {
                 this.helpMenuToogle(false);
             }

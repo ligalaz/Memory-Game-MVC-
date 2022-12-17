@@ -19,7 +19,7 @@ export class StartModel {
     }
 
     public formedGameField(cardNumber: number): Array<ICard> {
-        return [...this.cardKit.slice(0, cardNumber), ...this.cardKit.slice(0, cardNumber)];
+        return [...this.cardKit.slice(0, cardNumber), ...this.cardKit.slice(0, cardNumber)].sort(() => Math.random() - 0.5);
     }
 
     public changeTimerStartTime(value: number): string {

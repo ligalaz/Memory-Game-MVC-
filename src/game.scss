@@ -403,21 +403,6 @@
         height: 150px;
         @include crossbrowser_br(15px);
         cursor: pointer;
-        &:hover > .game-card__front {
-          transform: perspective(600px) rotateY(-180deg);
-          -webkit-transform: perspective(600px) rotateY(-180deg);
-          -moz-transform: perspective(600px) rotateY(-180deg);
-          -ms-transform: perspective(600px) rotateY(-180deg);
-          -o-transform: perspective(600px) rotateY(-180deg);
-        }
-
-        &:hover > .game-card__back {
-          transform: perspective(600px) rotateY(0deg);
-          -webkit-transform: perspective(600px) rotateY(0deg);
-          -moz-transform: perspective(600px) rotateY(0deg);
-          -ms-transform: perspective(600px) rotateY(0deg);
-          -o-transform: perspective(600px) rotateY(0deg);
-        }
       }
 
   .game-card {
@@ -481,6 +466,21 @@
 
         text-shadow: $text-shadow_color;
     }
+  
+  .front-back {
+  transform: perspective(600px) rotateY(-180deg);
+  -webkit-transform: perspective(600px) rotateY(-180deg);
+  -moz-transform: perspective(600px) rotateY(-180deg);
+  -ms-transform: perspective(600px) rotateY(-180deg);
+  -o-transform: perspective(600px) rotateY(-180deg);
+}
+.back-front {
+  transform: perspective(600px) rotateY(0deg);
+     -webkit-transform: perspective(600px) rotateY(0deg);
+     -moz-transform: perspective(600px) rotateY(0deg);
+     -ms-transform: perspective(600px) rotateY(0deg);
+     -o-transform: perspective(600px) rotateY(0deg);
+}
   }
  }
 

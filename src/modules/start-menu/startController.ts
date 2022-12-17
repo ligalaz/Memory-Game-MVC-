@@ -8,6 +8,7 @@ export class StartController {
     }
 
     public startGame(gameSettings: GameSettings): void {
-        this.startModel.activateGameView(gameSettings.element as HTMLBodyElement, gameSettings.playerName, gameSettings.gameCards);
+        console.log("dfd");
+        this.startModel.gameInitialize(gameSettings);
     }
 }
