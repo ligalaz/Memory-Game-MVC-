@@ -4,10 +4,10 @@ export class GameModel {
     public guessedValue: number;
     constructor() {
         this.compareContainer = [];
+        this.guessedContainer = [];
     }
 
     public checkWin(): boolean {
-        alert(`You Win`);
         return this.guessedContainer.length === this.guessedValue ? true : false;
     }
 
@@ -23,7 +23,11 @@ export class GameModel {
         this.compareContainer.push(id);
     }
 
-    public addGuessedCard(cardName: string): void {
-        this.guessedContainer.push(cardName);
+    public addGuessedCard(id: string): void {
+        this.guessedContainer.push(id);
+    }
+
+    public searchGuessed(id: string): boolean {
+        return this.guessedContainer.includes(id);
     }
 }

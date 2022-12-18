@@ -3,20 +3,22 @@ import { GameController } from "./gameController";
 
 export class GameView extends View {
     public gameController: GameController;
+    public manyChangesValidator: Array<string>;
     public gameCards: NodeListOf<HTMLDivElement>;
+    public messageMenu: HTMLDivElement;
+    public messageButton: HTMLButtonElement;
+    public isGameStarted = false;
+
+    public messageHidden = `main-message_hidden`;
     public frontCards = `.game-card__front`;
     public backCards = `.game-card__back`;
     public backFrontTransform = `back-front`;
     public frontBackTransform = `front-back`;
-    public messageMenu: HTMLDivElement;
-    public messageButton: HTMLButtonElement;
-
-    public messageHidden = `main-message_hidden`;
-    public isGameStarted = false;
 
     constructor(public element: HTMLBodyElement) {
         super(element);
         this.gameController = new GameController();
+        this.manyChangesValidator = [`0`];
     }
 
     public render(props?: IProps): void {
@@ -29,7 +31,7 @@ export class GameView extends View {
                                     </div> 
                                     <div class="game-field parent__game-field" id="${playerName}">${gameField
             .map(
-                (item: ICard) => `<div id="${item.id}" class="game-card game-field__card">
+                (item: ICard, idx: number) => `<div id="${item.id}" class="game-card game-field__card" data-position="${idx + 1}">
                                         <div class="game-card__front">
                                             <div class="card-image game-card__image">
                                                 <img
@@ -57,33 +59,12 @@ export class GameView extends View {
 
     public listeners(): void {
         this.messageButton.addEventListener("click", () => {
-            this.messageMenu.classList.add(this.messageHidden);
-            window.setTimeout(() => {
-                this.gameCards.forEach((item) => {
-                    this.hideCard(true, item);
-                    this.isGameStarted = true;
-                });
-            }, 5000);
+            this.startGameView();
         });
+
         this.gameCards.forEach((item) => {
             item.addEventListener("click", (e: Event) => {
-                if (this.isGameStarted) {
-                    const value = this.gameController.checkCard((e.currentTarget as HTMLDivElement).id);
-                    if (value === (e.currentTarget as HTMLDivElement).id) {
-                        this.hideCard(false, item);
-                    } else {
-                        this.gameCards.forEach((item) => {
-                            if (item.id === value || item.id === (e.currentTarget as HTMLDivElement).id) {
-                                window.setTimeout(() => {
-                                    this.hideCard(true, item);
-                                }, 1000);
-                                this.hideCard(false, e.currentTarget as HTMLDivElement);
-                            }
-                        });
-                    }
-                } else {
-                    console.log(null);
-                }
+                this.isGameStarted ? this.gameMove(e, item) : null;
             });
         });
     }
@@ -94,6 +75,43 @@ export class GameView extends View {
         this.listeners();
     }
 
+    public startGameView(): void {
+        this.messageMenu.classList.add(this.messageHidden);
+        window.setTimeout(() => {
+            this.gameCards.forEach((item) => {
+                this.hideCard(true, item);
+                this.isGameStarted = true;
+            });
+        }, 5000);
+    }
+
+    public gameMove(e: Event, item: HTMLDivElement): void {
+        const target = e.currentTarget as HTMLDivElement;
+        const position = target.dataset.position as string;
+        this.validateGameMove(target.id, position) ? this.viewGameMove(target.id, item) : alert(`This card has been guessed`);
+    }
+
+    public viewGameMove(id: string, currentItem: HTMLDivElement): void {
+        const value = this.gameController.checkCard(id);
+        if (value === id) {
+            this.hideCard(false, currentItem);
+        } else {
+            this.unGuessedView(value, currentItem, id);
+        }
+    }
+
+    public unGuessedView(value: string, currentItem: HTMLDivElement, id: string): void {
+        this.gameCards.forEach((item) => {
+            if (item.id === value || item.id === id) {
+                window.setTimeout(() => {
+                    this.hideCard(true, item);
+                }, 1000);
+                this.hideCard(false, currentItem);
+                this.manyChangesValidator.pop();
+            }
+        });
+    }
+
     public hideCard(flag: boolean, item: HTMLDivElement): void {
         if (flag) {
             item.querySelector(this.backCards)?.classList.add(this.backFrontTransform);
@@ -102,5 +120,20 @@ export class GameView extends View {
             item.querySelector(this.backCards)?.classList.remove(this.backFrontTransform);
             item.querySelector(this.frontCards)?.classList.remove(this.frontBackTransform);
         }
+    }
+
+    public validateGameMove(id: string, position: string): boolean {
+        return !this.checkGuessed(id) && this.validateManyChanges(position) ? true : false;
+    }
+
+    public checkGuessed(id: string): boolean {
+        return this.gameController.checkGuessed(id);
+    }
+
+    public validateManyChanges(position: string): boolean {
+        this.manyChangesValidator.push(position);
+        return this.manyChangesValidator[this.manyChangesValidator.length - 1] === this.manyChangesValidator[this.manyChangesValidator.length - 2]
+            ? false
+            : true;
     }
 }

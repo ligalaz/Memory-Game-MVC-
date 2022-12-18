@@ -8,7 +8,6 @@ export class StartController {
     }
 
     public startGame(gameSettings: GameSettings): void {
-        console.log("dfd");
         this.startModel.gameInitialize(gameSettings);
     }
 }

@@ -9,6 +9,9 @@ export class GameController {
     public currentCompareLength(): number {
         return this.gameModel.compareContainer.length;
     }
+    public checkGuessed(id: string): boolean {
+        return this.gameModel.searchGuessed(id);
+    }
 
     public checkCard(id: string): string {
         switch (this.currentCompareLength()) {
@@ -19,6 +22,7 @@ export class GameController {
             case 1:
                 this.gameModel.addCardsForCompare(id);
                 if (this.gameModel.compareCards()) {
+                    this.gameModel.addGuessedCard(id);
                     this.gameModel.compareContainer = [];
                     return id;
                 } else {
