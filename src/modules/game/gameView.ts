@@ -4,10 +4,18 @@ import { GameController } from "./gameController";
 export class GameView extends View {
     public gameController: GameController;
     public manyChangesValidator: Array<string>;
+    public playerName: string;
     public gameCards: NodeListOf<HTMLDivElement>;
     public messageMenu: HTMLDivElement;
     public messageButton: HTMLButtonElement;
+    public winMessageMenu: HTMLDivElement;
+    public newGameButton: HTMLButtonElement;
+    public restartGameButton: HTMLButtonElement;
+    public pauseButton: HTMLButtonElement;
+    public timerCount: HTMLDivElement;
+    public timerId: number;
     public isGameStarted = false;
+    public isGameEnded = false;
 
     public messageHidden = `main-message_hidden`;
     public frontCards = `.game-card__front`;
@@ -24,10 +32,27 @@ export class GameView extends View {
     public render(props?: IProps): void {
         const { playerName, gameField, timer } = props as IProps;
 
-        this.element.innerHTML = `<main class="main parent_started_false">
+        this.element.innerHTML = ` <header class="header parent__header">
+                                        <div class="pause-btn parent__pause-btn">
+                                             <svg class="pause-btn__logo">
+                                                <use class="pause-btn__item" xlink:href="./resources/icons/buttons/pause.svg#pause"></use>
+                                             </svg>
+                                        </div>
+                                        <div class="timer parent__timer">
+                                             <p class="timer__item">Remaining</p>
+                                            <p class="count timer__item">${timer}</p>
+                                            <p class="timer__item">seconds</p>
+                                        </div>
+                                    </header>
+                                    <main class="main parent_started_false">
                                      <div class="main-message ">
                                         <p class="main-message__text"><span class="main-message__attention">${playerName}</span>, remember the position of the cards</p>
                                         <button class="button main-message__button">OK</button>
+                                    </div> 
+                                    <div class="main-message main-message_hidden">
+                                        <p class="main-message__text"></p>
+                                        <button class="button main-message__button">New Game</button>
+                                        <button class="button main-message__button">Restart</button>
                                     </div> 
                                     <div class="game-field parent__game-field" id="${playerName}">${gameField
             .map(
@@ -52,9 +77,14 @@ export class GameView extends View {
                                 </main>`;
     }
     public hosts(): void {
+        this.playerName = (this.element.querySelector(`.game-field`) as HTMLDivElement).id;
         this.gameCards = this.element.querySelectorAll(`.game-card`);
-        this.messageMenu = this.element.querySelector(`.main-message`) as HTMLDivElement;
-        this.messageButton = this.element.querySelector(".main-message__button") as HTMLButtonElement;
+        this.messageMenu = this.element.querySelectorAll(`.main-message`)[0] as HTMLDivElement;
+        this.messageButton = this.messageMenu.querySelector(".main-message__button") as HTMLButtonElement;
+        this.winMessageMenu = this.element.querySelectorAll(`.main-message`)[1] as HTMLDivElement;
+        this.newGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[0] as HTMLButtonElement;
+        this.restartGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[1] as HTMLButtonElement;
+        this.timerCount = this.element.querySelector(`.count`) as HTMLDivElement;
     }
 
     public listeners(): void {
@@ -80,9 +110,23 @@ export class GameView extends View {
         window.setTimeout(() => {
             this.gameCards.forEach((item) => {
                 this.hideCard(true, item);
-                this.isGameStarted = true;
             });
+            this.isGameStarted = true;
+            this.gameController.setModelSettings(this.gameCards.length / 2, this.timerCount.textContent as string);
+            this.gameController.setTimer();
+            this.timerView();
         }, 5000);
+    }
+
+    public timerView(): void {
+        this.timerId = window.setInterval(() => {
+            const timerValue = this.gameController.getTimer();
+            console.log(timerValue);
+            this.timerCount.textContent = timerValue;
+            if (!Number(timerValue)) {
+                this.winnerView();
+            }
+        }, 1000);
     }
 
     public gameMove(e: Event, item: HTMLDivElement): void {
@@ -98,6 +142,7 @@ export class GameView extends View {
         } else {
             this.unGuessedView(value, currentItem, id);
         }
+        this.winnerView();
     }
 
     public unGuessedView(value: string, currentItem: HTMLDivElement, id: string): void {
@@ -135,5 +180,31 @@ export class GameView extends View {
         return this.manyChangesValidator[this.manyChangesValidator.length - 1] === this.manyChangesValidator[this.manyChangesValidator.length - 2]
             ? false
             : true;
+    }
+
+    public winnerView(): void {
+        const { message, time } = this.gameController.getWin(this.playerName);
+        console.log(message);
+
+        switch (message) {
+            case `You win`:
+                this.winMessageMenu.innerHTML = `<p class="main-message__text">Congratulations, ${this.playerName} you Win with time: ${time}</p>
+                                        <button class="button main-message__button">New Game</button>
+                                        <button class="button main-message__button">Restart</button>`;
+                this.winMessageMenu.classList.remove(this.messageHidden);
+                this.isGameStarted = false;
+                clearInterval(this.timerId);
+                break;
+            case `You loss`:
+                this.winMessageMenu.innerHTML = `<p class="main-message__text">Sorry, ${this.playerName} you loss (!</p>
+                                        <button class="button main-message__button">New Game</button>
+                                        <button class="button main-message__button">Restart</button>`;
+                this.winMessageMenu.classList.remove(this.messageHidden);
+                this.isGameStarted = false;
+                clearInterval(this.timerId);
+                break;
+            default:
+                break;
+        }
     }
 }

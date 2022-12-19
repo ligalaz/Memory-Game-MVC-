@@ -6,7 +6,12 @@ export interface ICard {
 
 export interface IResult {
     playerName: string;
-    time: Date;
+    time: string;
+}
+
+export interface IResultMessage {
+    message: string;
+    time: string;
 }
 
 export interface GameSettings {

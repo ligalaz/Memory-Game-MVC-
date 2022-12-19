@@ -1,9 +1,29 @@
+import { IResultMessage } from "../../interfaces/interface";
 import { GameModel } from "./gameModel";
 
 export class GameController {
     public gameModel: GameModel;
     constructor() {
         this.gameModel = new GameModel();
+    }
+
+    public setModelSettings(value: number, timer: string): void {
+        this.gameModel.guessedValue = value;
+        this.gameModel.timerValue = Number(timer);
+        this.gameModel.currentTimerTime = Number(timer);
+        this.gameModel.isTimerStarted = true;
+    }
+
+    public setTimer(): void {
+        this.gameModel.timerActivate();
+    }
+
+    public getTimer(): string {
+        return String(this.gameModel.currentTimerTime);
+    }
+
+    public getWin(playerName: string): IResultMessage {
+        return this.gameModel.checkWin(playerName);
     }
 
     public currentCompareLength(): number {
@@ -33,6 +53,7 @@ export class GameController {
                 break;
             default:
                 return id;
+                break;
         }
     }
 }
