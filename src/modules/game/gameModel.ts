@@ -61,7 +61,7 @@ export class GameModel {
     }
 
     public gameEndTime(startTime: number, endTime: number): string {
-        return `${startTime - endTime} s`;
+        return `${startTime - endTime}s`;
     }
 
     public saveWinner(result: IResult): void {

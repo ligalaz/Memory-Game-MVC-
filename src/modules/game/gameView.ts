@@ -15,7 +15,7 @@ export class GameView extends View {
     public timerCount: HTMLDivElement;
     public timerId: number;
     public isGameStarted = false;
-    public isGameEnded = false;
+    public isGamePaused = false;
 
     public messageHidden = `main-message_hidden`;
     public frontCards = `.game-card__front`;
@@ -84,6 +84,7 @@ export class GameView extends View {
         this.winMessageMenu = this.element.querySelectorAll(`.main-message`)[1] as HTMLDivElement;
         this.newGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[0] as HTMLButtonElement;
         this.restartGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[1] as HTMLButtonElement;
+        this.pauseButton = this.element.querySelector(`.pause-btn__item`) as HTMLButtonElement;
         this.timerCount = this.element.querySelector(`.count`) as HTMLDivElement;
     }
 
@@ -96,6 +97,13 @@ export class GameView extends View {
             item.addEventListener("click", (e: Event) => {
                 this.isGameStarted ? this.gameMove(e, item) : null;
             });
+            item.addEventListener("dbclick", () => {
+                return null;
+            });
+        });
+
+        this.pauseButton.addEventListener("click", () => {
+            this.gameController.getTimer() !== "undefined" ? this.pauseView() : null;
         });
     }
 
@@ -113,7 +121,7 @@ export class GameView extends View {
             });
             this.isGameStarted = true;
             this.gameController.setModelSettings(this.gameCards.length / 2, this.timerCount.textContent as string);
-            this.gameController.setTimer();
+            this.gameController.setTimer(false);
             this.timerView();
         }, 5000);
     }
@@ -121,7 +129,6 @@ export class GameView extends View {
     public timerView(): void {
         this.timerId = window.setInterval(() => {
             const timerValue = this.gameController.getTimer();
-            console.log(timerValue);
             this.timerCount.textContent = timerValue;
             if (!Number(timerValue)) {
                 this.winnerView();
@@ -182,29 +189,42 @@ export class GameView extends View {
             : true;
     }
 
+    public pauseView(): void {
+        if (this.isGamePaused) {
+            this.gameController.setTimer(false);
+            this.gameController.setModelSettings(this.gameCards.length / 2, this.timerCount.textContent as string);
+            this.timerView();
+        } else {
+            this.gameController.setTimer(true);
+            clearInterval(this.timerId);
+        }
+        this.isGamePaused = !this.isGamePaused;
+        this.isGameStarted = !this.isGameStarted;
+    }
+
     public winnerView(): void {
         const { message, time } = this.gameController.getWin(this.playerName);
-        console.log(message);
-
         switch (message) {
             case `You win`:
-                this.winMessageMenu.innerHTML = `<p class="main-message__text">Congratulations, ${this.playerName} you Win with time: ${time}</p>
-                                        <button class="button main-message__button">New Game</button>
-                                        <button class="button main-message__button">Restart</button>`;
-                this.winMessageMenu.classList.remove(this.messageHidden);
-                this.isGameStarted = false;
-                clearInterval(this.timerId);
+                this.createResultView(time, message, true);
                 break;
             case `You loss`:
-                this.winMessageMenu.innerHTML = `<p class="main-message__text">Sorry, ${this.playerName} you loss (!</p>
-                                        <button class="button main-message__button">New Game</button>
-                                        <button class="button main-message__button">Restart</button>`;
-                this.winMessageMenu.classList.remove(this.messageHidden);
-                this.isGameStarted = false;
-                clearInterval(this.timerId);
+                this.createResultView(time, message, false);
                 break;
             default:
                 break;
         }
+    }
+
+    public createResultView(time: string, message: string, flag: boolean): void {
+        const template = flag
+            ? `<p class="main-message__text">Congratulations, <span class="main-message__attention">"${this.playerName}"</span> <span class="main-message__attention">${message}</span> with time: <span class="main-message__attention">${time}</span>!</p>`
+            : `<p class="main-message__text">Sorry, <span class="main-message__attention">"${this.playerName}"</span> <span class="main-message__attention">${message}</span> (!</p>`;
+        this.winMessageMenu.innerHTML = `${template}
+                                        <button class="button main-message__button">New Game</button>
+                                        <button class="button main-message__button">Restart</button>`;
+        this.winMessageMenu.classList.remove(this.messageHidden);
+        this.isGameStarted = false;
+        clearInterval(this.timerId);
     }
 }

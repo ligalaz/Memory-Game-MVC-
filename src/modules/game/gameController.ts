@@ -11,11 +11,11 @@ export class GameController {
         this.gameModel.guessedValue = value;
         this.gameModel.timerValue = Number(timer);
         this.gameModel.currentTimerTime = Number(timer);
-        this.gameModel.isTimerStarted = true;
     }
 
-    public setTimer(): void {
-        this.gameModel.timerActivate();
+    public setTimer(pause: boolean): void {
+        this.gameModel.isTimerStarted = pause ? false : true;
+        pause ? null : this.gameModel.timerActivate();
     }
 
     public getTimer(): string {

@@ -109,14 +109,15 @@
 .main-message {
       position: absolute;
       width:340px;
-      height:100px;
-      top:50%-calc(100px /2);
+      height:150px;
+      top:50%-calc(150px /2);
       left:50%-calc(340px/2);
       z-index: 10;
       text-align: center;
       word-spacing: 10px;
       opacity: 1;
        @include crossbrowser_transition(0.5s);
+       @include crossbrowser_br(50px);
 
       @include centr-vert-flex;
       gap:10px;
