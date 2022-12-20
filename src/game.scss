@@ -10,9 +10,12 @@
   background-image: url("./resources/img/pokemon_bg.jpg");
   background-size: cover;
 
+  &_started_true {
+    @include space-vert-flex;
+  }
+
   &_started_false {
     @include centr-vert-flex;
-   
   }
 
   &_hidden {
@@ -48,12 +51,19 @@
 
   &__main {
     @include centr-vert-flex;
-
+    background: red;
   }
 
   .pause-btn__item {
     cursor: pointer;
+    opacity: 0.6;
+    @include crossbrowser_transition(0.3s);
   }
+
+  .pause-btn_active {
+    opacity: 1;
+    @include crossbrowser_transition(0.3s);
+}
 
 
   &__timer {
@@ -484,6 +494,8 @@
 }
   }
  }
+
+ 
 
 
 

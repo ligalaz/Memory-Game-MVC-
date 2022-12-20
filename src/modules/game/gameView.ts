@@ -14,6 +14,7 @@ export class GameView extends View {
     public pauseButton: HTMLButtonElement;
     public timerCount: HTMLDivElement;
     public timerId: number;
+    public pauseGuard = false;
     public isGameStarted = false;
     public isGamePaused = false;
 
@@ -22,6 +23,7 @@ export class GameView extends View {
     public backCards = `.game-card__back`;
     public backFrontTransform = `back-front`;
     public frontBackTransform = `front-back`;
+    public pauseButtonActive = `pause-btn_active`;
 
     constructor(public element: HTMLBodyElement) {
         super(element);
@@ -46,7 +48,7 @@ export class GameView extends View {
                                     </header>
                                     <main class="main parent_started_false">
                                      <div class="main-message ">
-                                        <p class="main-message__text"><span class="main-message__attention">${playerName}</span>, remember the position of the cards</p>
+                                        <p class="main-message__text"><span class="main-message__attention">"${playerName}"</span>, remember the position of the cards</p>
                                         <button class="button main-message__button">OK</button>
                                     </div> 
                                     <div class="main-message main-message_hidden">
@@ -74,7 +76,20 @@ export class GameView extends View {
             )
             .join("")}
                                     </div>
-                                </main>`;
+                                </main>
+                                <footer class="footer parent__footer">
+                                    <div class="link footer__link">
+                                        <a class="link__item" href="https://ligalaz.github.io/rsschool-cv/" target="_blank">
+                                            <svg  class="link__logo">
+                                                <use xlink:href="./resources/icons/links/github.svg#github"></use>
+                                            </svg>
+                                         </a>
+                                    </div>
+                                    <div class="created footer__created">
+                                        <p class="created__text">Created by Artsiom Mikula</p>
+                                        <p class="created__year">Minsk 2022</p>
+                                    </div>
+                                </footer>`;
     }
     public hosts(): void {
         this.playerName = (this.element.querySelector(`.game-field`) as HTMLDivElement).id;
@@ -86,6 +101,7 @@ export class GameView extends View {
         this.restartGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[1] as HTMLButtonElement;
         this.pauseButton = this.element.querySelector(`.pause-btn__item`) as HTMLButtonElement;
         this.timerCount = this.element.querySelector(`.count`) as HTMLDivElement;
+        this.element.classList.add(`parent_started_true`);
     }
 
     public listeners(): void {
@@ -97,13 +113,20 @@ export class GameView extends View {
             item.addEventListener("click", (e: Event) => {
                 this.isGameStarted ? this.gameMove(e, item) : null;
             });
-            item.addEventListener("dbclick", () => {
+            item.addEventListener("dblclick", () => {
                 return null;
             });
         });
 
-        this.pauseButton.addEventListener("click", () => {
-            this.gameController.getTimer() !== "undefined" ? this.pauseView() : null;
+        this.pauseButton.addEventListener("click", (e: Event) => {
+            if (!this.pauseGuard) {
+                this.gameController.getTimer() !== "undefined" ? this.pauseView() : null;
+            } else {
+                alert(`Not so fast, ${this.playerName}`);
+            }
+            setTimeout(() => {
+                this.pauseGuard = false;
+            }, 300);
         });
     }
 
@@ -190,6 +213,7 @@ export class GameView extends View {
     }
 
     public pauseView(): void {
+        this.pauseGuard = true;
         if (this.isGamePaused) {
             this.gameController.setTimer(false);
             this.gameController.setModelSettings(this.gameCards.length / 2, this.timerCount.textContent as string);
@@ -198,6 +222,7 @@ export class GameView extends View {
             this.gameController.setTimer(true);
             clearInterval(this.timerId);
         }
+        this.pauseButton.classList.toggle(this.pauseButtonActive);
         this.isGamePaused = !this.isGamePaused;
         this.isGameStarted = !this.isGameStarted;
     }
@@ -218,13 +243,21 @@ export class GameView extends View {
 
     public createResultView(time: string, message: string, flag: boolean): void {
         const template = flag
-            ? `<p class="main-message__text">Congratulations, <span class="main-message__attention">"${this.playerName}"</span> <span class="main-message__attention">${message}</span> with time: <span class="main-message__attention">${time}</span>!</p>`
-            : `<p class="main-message__text">Sorry, <span class="main-message__attention">"${this.playerName}"</span> <span class="main-message__attention">${message}</span> (!</p>`;
+            ? `<p class="main-message__text">Congratulations, <span class="main-message__attention">"${this.playerName}"</span>, <span class="main-message__attention">${message}</span> with time: <span class="main-message__attention">${time}</span>!</p>`
+            : `<p class="main-message__text">Sorry, <span class="main-message__attention">"${this.playerName}"</span>, <span class="main-message__attention">${message}</span> (!</p>`;
         this.winMessageMenu.innerHTML = `${template}
                                         <button class="button main-message__button">New Game</button>
                                         <button class="button main-message__button">Restart</button>`;
         this.winMessageMenu.classList.remove(this.messageHidden);
         this.isGameStarted = false;
         clearInterval(this.timerId);
+        this.unClickedPause();
+    }
+
+    public unClickedPause(): void {
+        this.pauseButton.addEventListener("click", () => {
+            this.isGameStarted = false;
+            this.isGamePaused = false;
+        });
     }
 }
