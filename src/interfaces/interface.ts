@@ -37,3 +37,5 @@ export abstract class View {
 
     public initialize(props?: IProps): void {}
 }
+
+export type leaderBoard = Array<IResult> | string | Array<string>;

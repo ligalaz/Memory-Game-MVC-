@@ -1,9 +1,10 @@
-import { IResult, IResultMessage } from "../../interfaces/interface";
+import { sortingByTime } from "../../interfaces/constants";
+import { IResult, IResultMessage, leaderBoard } from "../../interfaces/interface";
 
 export class GameModel {
     public compareContainer: Array<string>;
     public guessedContainer: Array<string>;
-    public winnersContainer: Array<IResult> | string;
+    public winnersContainer: leaderBoard;
     public guessedValue: number;
     public timerValue: number;
     public currentTimerTime: number;
@@ -71,7 +72,8 @@ export class GameModel {
 
     public transformResultTable(result: IResult): void {
         this.winnersContainer = JSON.parse(localStorage.getItem("winners") as string) || [];
-        this.winnersContainer = this.winnersContainer.length === 10 ? this.winnersContainer.slice(1) : this.winnersContainer;
         (this.winnersContainer as Array<IResult>).push(result);
+        this.winnersContainer = sortingByTime(this.winnersContainer as Array<IResult>);
+        this.winnersContainer = this.winnersContainer.length === 11 ? this.winnersContainer.slice(1) : this.winnersContainer;
     }
 }

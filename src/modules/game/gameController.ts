@@ -1,8 +1,10 @@
 import { IResultMessage } from "../../interfaces/interface";
+import { PauseView } from "../pause-menu/pauseView";
 import { GameModel } from "./gameModel";
 
 export class GameController {
     public gameModel: GameModel;
+    public pauseView: PauseView;
     constructor() {
         this.gameModel = new GameModel();
     }
@@ -55,5 +57,18 @@ export class GameController {
                 return id;
                 break;
         }
+    }
+
+    public pauseMenuActive(element: HTMLElement, gameElement: HTMLBodyElement): void {
+        this.pauseView = new PauseView(element, gameElement);
+        this.pauseView.initialize();
+    }
+
+    public newGame(): void {
+        this.pauseView.newGameView();
+    }
+
+    public restartGame(): void {
+        this.pauseView.restartView();
     }
 }

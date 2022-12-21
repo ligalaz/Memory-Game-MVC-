@@ -12,18 +12,19 @@ export class GameView extends View {
     public newGameButton: HTMLButtonElement;
     public restartGameButton: HTMLButtonElement;
     public pauseButton: HTMLButtonElement;
+    public pauseMenu: HTMLDivElement;
     public timerCount: HTMLDivElement;
     public timerId: number;
     public pauseGuard = false;
     public isGameStarted = false;
     public isGamePaused = false;
-
     public messageHidden = `main-message_hidden`;
     public frontCards = `.game-card__front`;
     public backCards = `.game-card__back`;
     public backFrontTransform = `back-front`;
     public frontBackTransform = `front-back`;
     public pauseButtonActive = `pause-btn_active`;
+    public pauseMenuHidden = `pause-menu_hidden`;
 
     constructor(public element: HTMLBodyElement) {
         super(element);
@@ -77,6 +78,7 @@ export class GameView extends View {
             .join("")}
                                     </div>
                                 </main>
+                                <div id='${JSON.stringify(props)}' class="pause-menu__template pause-menu_hidden"></div>
                                 <footer class="footer parent__footer">
                                     <div class="link footer__link">
                                         <a class="link__item" href="https://ligalaz.github.io/rsschool-cv/" target="_blank">
@@ -90,6 +92,7 @@ export class GameView extends View {
                                         <p class="created__year">Minsk 2022</p>
                                     </div>
                                 </footer>`;
+        this.element.classList.add(`parent_started_true`);
     }
     public hosts(): void {
         this.playerName = (this.element.querySelector(`.game-field`) as HTMLDivElement).id;
@@ -97,11 +100,9 @@ export class GameView extends View {
         this.messageMenu = this.element.querySelectorAll(`.main-message`)[0] as HTMLDivElement;
         this.messageButton = this.messageMenu.querySelector(".main-message__button") as HTMLButtonElement;
         this.winMessageMenu = this.element.querySelectorAll(`.main-message`)[1] as HTMLDivElement;
-        this.newGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[0] as HTMLButtonElement;
-        this.restartGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[1] as HTMLButtonElement;
         this.pauseButton = this.element.querySelector(`.pause-btn__item`) as HTMLButtonElement;
+        this.pauseMenu = this.element.querySelector(`.pause-menu__template`) as HTMLDivElement;
         this.timerCount = this.element.querySelector(`.count`) as HTMLDivElement;
-        this.element.classList.add(`parent_started_true`);
     }
 
     public listeners(): void {
@@ -146,6 +147,7 @@ export class GameView extends View {
             this.gameController.setModelSettings(this.gameCards.length / 2, this.timerCount.textContent as string);
             this.gameController.setTimer(false);
             this.timerView();
+            this.gameController.pauseMenuActive(this.pauseMenu, this.element);
         }, 5000);
     }
 
@@ -222,6 +224,7 @@ export class GameView extends View {
             this.gameController.setTimer(true);
             clearInterval(this.timerId);
         }
+        this.pauseMenu.classList.toggle(this.pauseMenuHidden);
         this.pauseButton.classList.toggle(this.pauseButtonActive);
         this.isGamePaused = !this.isGamePaused;
         this.isGameStarted = !this.isGameStarted;
@@ -252,12 +255,29 @@ export class GameView extends View {
         this.isGameStarted = false;
         clearInterval(this.timerId);
         this.unClickedPause();
+        this.messageButtonHost();
     }
 
     public unClickedPause(): void {
         this.pauseButton.addEventListener("click", () => {
+            this.pauseButton.classList.remove(this.pauseButtonActive);
             this.isGameStarted = false;
             this.isGamePaused = false;
         });
+    }
+
+    public messageButtonHost(): void {
+        this.newGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[0] as HTMLButtonElement;
+        this.restartGameButton = this.winMessageMenu.querySelectorAll(`.main-message__button`)[1] as HTMLButtonElement;
+        this.newGameButton.addEventListener("click", () => {
+            this.gameReview(true);
+        });
+        this.restartGameButton.addEventListener("click", () => {
+            this.gameReview(false);
+        });
+    }
+
+    public gameReview(flag: boolean): void {
+        flag ? this.gameController.newGame() : this.gameController.restartGame();
     }
 }

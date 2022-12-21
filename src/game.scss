@@ -353,10 +353,29 @@
 
 }
 
+.pause-menu__template {
+  position: absolute;
+  width:30%;
+  height:50%;
+  top:30%;
+  left:50%-calc(60%/2);
+  z-index: 1;
+  @include centr-horiz-flex;
+
+}
+.pause-menu_hidden {
+  position: absolute;
+  display: none;
+  z-index:-3;
+}
+
+
 
 .pause-menu {
-  display: none;
+  display: flex;
   padding-bottom: 50px;
+  position: relative;
+  
 
   &__title::after {
   right: -115px;
@@ -395,8 +414,66 @@
     }
   }
   &__btn {
-     top: 220px;
+     top: 170px;
   }
+}
+
+.leaderboard {
+
+  position: absolute;
+  z-index: 10;
+  width:200px;
+  height:300px;
+  top:50%-calc(300px/2);
+  left:50%-calc(200px/2);
+  padding:10px;
+
+  background:$menu-bg_color;
+  opacity:1;
+
+  @include crossbrowser_br(10px);
+  @include font-styler(
+                $title_size,
+                $card-name_size,
+                $weight:700,
+                $color: $text_color,
+                );
+  @include crossbrowser_transition(1.5s);
+
+  .title {
+    text-align: center;
+    margin-bottom: 10px;
+    &::after,&::before {
+      display: none;
+    }
+  }
+  
+
+  &-list {
+    width:100%;
+    @include space-vert-flex;
+    font-size:$standart_size;
+  }
+
+  &__title {
+    margin:5px 0;  
+  }
+
+  &__title, &-list__item {
+    width:100%;
+    padding:5px 0;
+    @include space-horiz-flex;
+    border-bottom:2px dotted $leaderboard-border_color;
+  }
+
+  &_hidden {
+    z-index: -13;
+    opacity: 0;
+    
+    @include crossbrowser_transition(1.5s);
+
+  }
+  
 }
 
 /* Game-field */
@@ -425,6 +502,13 @@
       -webkit-backface-visibility: hidden;
 
       @include crossbrowser_transition(1s);
+
+      @include font-styler(
+                $card-name_size,
+                $card-name_size,
+                $weight:700,
+                $color: $text_color,
+                );
 }
 
     &__front {
