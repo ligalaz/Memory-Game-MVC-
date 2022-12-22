@@ -51,14 +51,25 @@ export class PauseView extends View {
         this.startButton.addEventListener(`click`, () => {
             this.newGameView();
         });
+
         this.restartButton.addEventListener(`click`, () => {
             this.restartView();
         });
 
-        this.leaderboardButton.addEventListener("click", () => {
-            this.createLeaderBoardView();
-            this.leaderboardView();
+        this.leaderboardMenu.addEventListener("click", (e: Event) => {
+            (e.target as HTMLElement).classList.add(this.leaderboardHidden);
         });
+
+        if (localStorage.getItem("winners")) {
+            this.leaderboardButton.addEventListener("click", () => {
+                this.createLeaderBoardView();
+                this.leaderboardView();
+            });
+        } else {
+            this.leaderboardButton.addEventListener("click", () => {
+                alert(`Sorry, leaderboard is empty. Win in game!`);
+            });
+        }
     }
 
     public initialize(): void {

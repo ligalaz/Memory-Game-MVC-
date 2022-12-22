@@ -1,4 +1,4 @@
-import { sortingByTime } from "../../interfaces/constants";
+import { arrayObjectsNameincludes, sortingByTime } from "../../interfaces/constants";
 import { IResult, IResultMessage, leaderBoard } from "../../interfaces/interface";
 
 export class GameModel {
@@ -72,7 +72,14 @@ export class GameModel {
 
     public transformResultTable(result: IResult): void {
         this.winnersContainer = JSON.parse(localStorage.getItem("winners") as string) || [];
-        (this.winnersContainer as Array<IResult>).push(result);
+        if (arrayObjectsNameincludes(this.winnersContainer as Array<IResult>, result.playerName)) {
+            (this.winnersContainer as Array<IResult>).forEach((item) => {
+                item.playerName === result.playerName && item.time >= result.time ? (item.time = result.time) : item.time;
+            });
+        } else {
+            (this.winnersContainer as Array<IResult>).push(result);
+        }
+
         this.winnersContainer = sortingByTime(this.winnersContainer as Array<IResult>);
         this.winnersContainer = this.winnersContainer.length === 11 ? this.winnersContainer.slice(1) : this.winnersContainer;
     }

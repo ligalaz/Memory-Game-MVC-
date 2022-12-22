@@ -6,12 +6,14 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  overflow-y: auto;
   @include centr-vert-flex;
   background-image: url("./resources/img/pokemon_bg.jpg");
   background-size: cover;
 
   &_started_true {
     @include space-vert-flex;
+    row-gap:20px;
   }
 
   &_started_false {
@@ -44,20 +46,27 @@
     }
 
   &__header, &__footer {
+    position: relative;
     width:100%;
     padding: 0 5% 0;
     @include space-horiz-flex;
+
+    @media screen and (max-width:500px) {
+        padding: 0 2% 0;
+        @include centr-horiz-flex;
+    }
   }
 
   &__main {
     @include centr-vert-flex;
-    background: red;
   }
+
 
   .pause-btn__item {
     cursor: pointer;
     opacity: 0.6;
     @include crossbrowser_transition(0.3s);
+  
   }
 
   .pause-btn_active {
@@ -80,6 +89,13 @@
     row-gap:10px;
     background: $timer-bg_color;
     box-shadow: $box-shadow_color;
+
+     @media screen and (max-width:500px) {
+      position: absolute;
+      top:20%;
+      left:65%;
+    }
+
   }
 
   .count {
@@ -110,6 +126,10 @@
       $color: $text_color,
     );
      text-shadow: $text-shadow_color;
+
+     @media screen and (max-width:500px) {
+      font-size: $standart_size;
+    }
   }
 
 }
@@ -126,6 +146,21 @@
       text-align: center;
       word-spacing: 10px;
       opacity: 1;
+
+
+       @media screen and (max-width:500px) {
+                width:300px;
+                padding: 0 5px;
+                height:150px;
+                top:50%-calc(150px /2);
+                left:50%-calc(300px/2);
+        }
+
+
+
+
+
+
        @include crossbrowser_transition(0.5s);
        @include crossbrowser_br(50px);
 
@@ -157,7 +192,9 @@
         padding: 5px;
 
         @include crossbrowser_br(10px);
-        border:2px solid $menu-border_color;
+        border:2px solid transparent;
+
+        @include crossbrowser_transition(0.3s);
 
         @include font-styler(
                 $standart_size,
@@ -168,7 +205,13 @@
                 text-shadow: $text-shadow_color;
 
         cursor:pointer;
+        &:hover {
+          border:2px solid $menu-border_color;
+          @include crossbrowser_transition(0.3s);
+
+        }
       }
+      
 
 
       }
@@ -188,6 +231,11 @@
   box-shadow:$box-shadow_color;
   background-image: $menu-bg_color;
   opacity: 0.95;
+
+   @media screen and (max-width:500px) {
+      width:300px;
+      border:5px solid $menu-border_color;
+    }
 }
 
 .menu-btn {
@@ -226,6 +274,10 @@
   );
   text-shadow:$text-shadow_color;
 
+  @media screen and (max-width:500px) {
+    font-size:$standart_size;
+    }
+
   &::after,&::before {
     @include pseudo-creater(
   $width: 100px,
@@ -246,15 +298,24 @@
     @include crossbrowser_transition(0.5s);
   }
 
-  
   &__title::after {
   right: -20.5px;
   border-top-right-radius: 10px;
+
+   @media screen and (max-width:500px) {
+    right: -33px;
+    top:-25px;
+    }
   }
 
   &__title::before {
   left: -20.5px;
   border-top-left-radius: 10px;
+
+  @media screen and (max-width:500px) {
+    left: -33px;
+    top:-25px;
+    }
   }
 
   &__form {
@@ -263,6 +324,10 @@
     @include centr-vert-flex;
     row-gap: 20px;
     margin-bottom: 100px;
+
+    @media screen and (max-width:500px) {
+                  margin-bottom: 200px;
+                }
 
       .form__name {
         height: 30px;
@@ -329,6 +394,10 @@
                 @include crossbrowser_br(10px);
                 border: 3px solid transparent;
 
+                @media screen and (max-width:500px) {
+                  padding: 5px;
+                }
+
                 @include font-styler(
                 $standart_size,
                 $standart_size,
@@ -362,6 +431,15 @@
   z-index: 1;
   @include centr-horiz-flex;
 
+  @media screen and (max-width:767px) {
+    width:50%;
+    height:50%;
+    top:30%;
+    left:50%-calc(60%/2);
+  }
+
+  
+
 }
 .pause-menu_hidden {
   position: absolute;
@@ -375,16 +453,18 @@
   display: flex;
   padding-bottom: 50px;
   position: relative;
+
+  @media screen and (max-width:767px) {
+    padding-bottom: 120px;
+  }
   
 
   &__title::after {
-  right: -115px;
-  border-top-right-radius: 10px;
+  display: none;
   }
 
   &__title::before {
-  left: -115px;
-  border-top-left-radius: 10px;
+  display: none;;
   }
 
   &__control {
@@ -430,6 +510,8 @@
 
   background:$menu-bg_color;
   opacity:1;
+
+  cursor:pointer;
 
   @include crossbrowser_br(10px);
   @include font-styler(
@@ -484,6 +566,12 @@
   height: auto;
   @include space-horiz-flex;
   gap:10px;
+
+  @media screen and (max-width:1000px) {
+    width:100%;
+    column-gap:25px;
+    justify-content: center;
+  }
 
       &__card {
         position: relative;

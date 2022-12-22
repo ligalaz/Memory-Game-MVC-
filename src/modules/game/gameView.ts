@@ -261,8 +261,10 @@ export class GameView extends View {
     public unClickedPause(): void {
         this.pauseButton.addEventListener("click", () => {
             this.pauseButton.classList.remove(this.pauseButtonActive);
+            this.pauseMenu.classList.add(this.pauseMenuHidden);
             this.isGameStarted = false;
             this.isGamePaused = false;
+            this.pauseGuard = true;
         });
     }
 
