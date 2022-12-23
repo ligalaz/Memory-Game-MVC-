@@ -1,0 +1,15 @@
+<svg width="0" height="0" class="hidden">
+  <symbol xmlns="http://www.w3.org/2000/svg" fill="blue" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xml:space="preserve" viewBox="0 0 400 400" id="pause">
+    <desc>Created with Fabric.js 3.6.2</desc>
+    <defs></defs>
+    <g transform="matrix(4.17 0 0 4.17 200 200)" id="Layer_1">
+      <path transform=" translate(-24, -24)" d="M 38 42 H 10 c -2.2 0 -4 -1.8 -4 -4 V 10 c 0 -2.2 1.8 -4 4 -4 h 28 c 2.2 0 4 1.8 4 4 v 28 C 42 40.2 40.2 42 38 42 z" stroke-linecap="round"></path>
+    </g>
+    <g transform="matrix(4.17 0 0 4.17 216.67 200)" id="Layer_1">
+      <rect x="-2" y="-6" rx="0" ry="0" width="4" height="12" fill="white"></rect>
+    </g>
+    <g transform="matrix(4.17 0 0 4.17 183.33 200)" id="Layer_1">
+      <rect x="-2" y="-6" rx="0" ry="0" width="4" height="12" fill="white"></rect>
+    </g>
+  </symbol>
+</svg>
