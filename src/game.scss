@@ -111,7 +111,7 @@
       @include svg-styler(60px,$fill:$link_color);
       @include crossbrowser_transition(0.3s);
           &:hover {
-     @include crossbrowser_scale(1.3);
+     @include crossbrowser_scale(1.1);
      @include crossbrowser_transition(0.3s);
     }
   }
