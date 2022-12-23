@@ -1,3 +1,3 @@
 Deploy:
 
-https://github.com/ligalaz/Memory-Game-MVC-/dist
+https://ligalaz.github.io/Memory-Game-MVC-/dist
